@@ -14,6 +14,7 @@ function clientWith(decision, calls = []) {
   return createVaryntiqMagpieClient({
     token: "test-token",
     agentId: "demo-agent",
+    baseUrl: "https://varyntiq.example.test",
     fetchImpl: async (requestUrl, init = {}) => {
       calls.push({ requestUrl, init });
       if (requestUrl.endsWith("/check")) {
@@ -47,7 +48,7 @@ test("checks Varyntiq before signing and retries Magpie with the payment signatu
 test("blocks before the signer on DENY", async () => {
   let signed = false;
   const client = createVaryntiqMagpieClient({
-    token: "test-token", agentId: "demo-agent",
+    token: "test-token", agentId: "demo-agent", baseUrl: "https://varyntiq.example.test",
     fetchImpl: async (requestUrl, init = {}) => {
       if (requestUrl.endsWith("/check")) {
         const body = JSON.parse(init.body);
@@ -68,7 +69,7 @@ test("blocks before the signer on DENY", async () => {
 
 test("fails closed when the policy service is unavailable", async () => {
   const client = createVaryntiqMagpieClient({
-    token: "test-token", agentId: "demo-agent",
+    token: "test-token", agentId: "demo-agent", baseUrl: "https://varyntiq.example.test",
     fetchImpl: async (requestUrl) => {
       if (requestUrl.endsWith("/check")) throw new Error("offline");
       return { status: 402, headers: new Headers({
