@@ -1,5 +1,3 @@
-const DEFAULT_BASE_URL = "https://payguard-production-abfe.up.railway.app";
-
 function requiredString(value, name) {
   if (typeof value !== "string" || !value.trim()) throw new TypeError(`${name} must be a non-empty string`);
   return value.trim();
@@ -27,7 +25,7 @@ export function createVaryntiqMagpieClient(options) {
   if (!options || typeof options !== "object") throw new TypeError("options are required");
   const token = requiredString(options.token, "token");
   const agentId = requiredString(options.agentId, "agentId");
-  const baseUrl = httpUrl(options.baseUrl ?? DEFAULT_BASE_URL, "baseUrl").replace(/\/$/, "");
+  const baseUrl = httpUrl(options.baseUrl, "baseUrl").replace(/\/$/, "");
   const timeoutMs = options.timeoutMs ?? 2500;
   if (!Number.isInteger(timeoutMs) || timeoutMs < 100 || timeoutMs > 30000) throw new TypeError("timeoutMs must be between 100 and 30000");
   const fetchImpl = options.fetchImpl ?? globalThis.fetch;
